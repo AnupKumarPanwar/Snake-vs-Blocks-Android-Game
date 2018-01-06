@@ -14,6 +14,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.BounceInterpolator;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     GestureDetector gestureDetector;
     Display display;
     Point size;
-    float screenWidth;
+    float screenWidth, screenHeight;
     LinearLayout linearLayout;
     View[] tail;
     int tailLength=5;
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         size=new Point();
         display.getSize(size);
         screenWidth=size.x;
+        screenHeight=size.y;
 
         gestureDetector=new GestureDetector(MainActivity.this, MainActivity.this);
 
@@ -199,24 +202,49 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     public void startGame()
     {
-       int energyProbability=new Random().nextInt(4);
+        Runnable runnable=new Runnable() {
+            @Override
+            public void run() {
+                int energyProbability=new Random().nextInt(4);
 
-       if (energyProbability==2)
-       {
-           int noOfBalls=new Random().nextInt(3);
+                if (energyProbability==2)
+                {
+                    int noOfBalls=new Random().nextInt(3);
 
-           for (int i=0; i<noOfBalls; i++) {
-               int ballEnergy=new Random().nextInt(5)+1;
+                    for (int i=0; i<noOfBalls; i++) {
+                        int ballEnergy=new Random().nextInt(5)+1;
+                        int energyX=new Random().nextInt((int)screenWidth-110)+10;
+//                        int energyY=new Random().nextInt((int)screenHeight*3/4-200);
 
-               View newBall = new View(MainActivity.this);
-               newBall.setBackgroundResource(R.drawable.dot);
-               newBall.setLayoutParams(new LinearLayout.LayoutParams(48, 48));
-               tail[i]=newBall;
-               linearLayout.addView(tail[i]);
+                        final View newEnergy = new View(MainActivity.this);
+                        newEnergy.setBackgroundResource(R.drawable.dot);
+                        newEnergy.setLayoutParams(new LinearLayout.LayoutParams(48, 48));
+                        newEnergy.setY(0);
+                        newEnergy.setX(energyX);
+                        gameContainer.addView(newEnergy);
+                        newEnergy.animate()
+                                .translationY(screenHeight)
+                                .setInterpolator(new AccelerateInterpolator())
+//                                .setInterpolator(new BounceInterpolator())
+                                .setDuration(2000);
 
-           }
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                gameContainer.removeView(newEnergy);
+                            }
+                        }, 1900);
 
-       }
+                    }
+
+                }
+
+                handler.postDelayed(this, 1000);
+            }
+        };
+
+        handler.postDelayed(runnable, 10);
+
 
     }
 }
