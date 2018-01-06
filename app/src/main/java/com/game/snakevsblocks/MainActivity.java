@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     View[] tail;
     int tailLength=5;
     Handler handler;
+    boolean gameStarted=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         display.getSize(size);
         screenWidth=size.x;
         screenHeight=size.y;
+
 
         gestureDetector=new GestureDetector(MainActivity.this, MainActivity.this);
 
@@ -90,7 +92,11 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 balls.setY(bY);
                 initBall.setY(ibY);
 
-                startGame();
+                if (!gameStarted)
+                {
+                    gameStarted=true;
+                    startGame();
+                }
 
                 return false;
             }
@@ -206,10 +212,11 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             @Override
             public void run() {
                 int energyProbability=new Random().nextInt(7);
+                int wallProbability=new Random().nextInt(10);
 
-                if (energyProbability==2)
+                if (energyProbability==2 || energyProbability==4 || energyProbability==5)
                 {
-                    int noOfBalls=new Random().nextInt(3);
+                    int noOfBalls=new Random().nextInt(3)+1;
 
                     for (int i=0; i<noOfBalls; i++) {
                         int ballEnergy=new Random().nextInt(5)+1;
@@ -238,12 +245,71 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                     }
 
                 }
+                else if (wallProbability==2)
+                {
+                    final View[] tiles=new View[6];
+                    for (int i=0; i<6; i++)
+                    {
+                        tiles[i] = new View(MainActivity.this);
+                        tiles[i].setBackgroundResource(R.drawable.blue_box);
+                        tiles[i].setLayoutParams(new LinearLayout.LayoutParams((int)screenWidth/6, (int)screenWidth/6));
+                        tiles[i].setY(0);
+                        tiles[i].setX(i*screenWidth/6);
+                        gameContainer.addView(tiles[i]);
+                        tiles[i].animate()
+                                .translationY(screenHeight)
+                                .setInterpolator(new AccelerateInterpolator())
+//                                .setInterpolator(new BounceInterpolator())
+                                .setDuration(2000);
 
-                handler.postDelayed(this, 2000);
+                        final int finalI = i;
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                gameContainer.removeView(tiles[finalI]);
+                            }
+                        }, 1900);
+                    }
+
+                }
+
+                else if (wallProbability==4 || wallProbability==6)
+                {
+                    final View[] tiles=new View[6];
+                    for (int i=0; i<6; i++)
+                    {
+                        int hideTile=new Random().nextInt(3);
+                        if (hideTile==1)
+                        {
+                            continue;
+                        }
+                        tiles[i] = new View(MainActivity.this);
+                        tiles[i].setBackgroundResource(R.drawable.blue_box);
+                        tiles[i].setLayoutParams(new LinearLayout.LayoutParams((int)screenWidth/6, (int)screenWidth/6));
+                        tiles[i].setY(0);
+                        tiles[i].setX(i*screenWidth/6);
+                        gameContainer.addView(tiles[i]);
+                        tiles[i].animate()
+                                .translationY(screenHeight)
+                                .setInterpolator(new AccelerateInterpolator())
+//                                .setInterpolator(new BounceInterpolator())
+                                .setDuration(2000);
+
+                        final int finalI = i;
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                gameContainer.removeView(tiles[finalI]);
+                            }
+                        }, 1900);
+                    }
+                }
+
+                handler.postDelayed(this, 750);
             }
         };
 
-        handler.postDelayed(runnable, 10);
+        handler.postDelayed(runnable, 100);
 
 
     }
