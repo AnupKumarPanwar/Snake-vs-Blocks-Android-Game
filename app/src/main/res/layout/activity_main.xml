@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    tools:context="com.game.snakevsblocks.MainActivity"
+    android:orientation="vertical"
+    android:id="@+id/game_container"
+    android:animateLayoutChanges="true">
+
+    <RelativeLayout
+        android:id="@+id/upper_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif-monospace"
+        android:gravity="center"
+        android:text="Snake"
+        android:textColor="@android:color/white"
+        android:textSize="60dp"
+        android:id="@+id/text_view"
+        android:layout_marginTop="100dp"/>
+
+    <TextView
+        android:id="@+id/text_view2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="VS"
+        android:textColor="@android:color/white"
+        android:textSize="70dp"
+        android:textStyle="bold"
+        android:layout_below="@+id/text_view"/>
+
+    <TextView
+        android:id="@+id/text_view3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif-monospace"
+        android:gravity="center"
+        android:text="Blocks"
+        android:textSize="60dp"
+        android:textColor="@android:color/white"
+        android:layout_below="@id/text_view2"/>
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/text_view3"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:id="@+id/relativeLayout">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/high_score"
+            android:id="@+id/image_view" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:gravity="left"
+            android:text="118"
+            android:textColor="@android:color/white"
+            android:textSize="30dp"
+            android:layout_toRightOf="@id/image_view"
+            android:textStyle="bold"/>
+
+    </RelativeLayout>
+    </RelativeLayout>
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+        android:layout_below="@id/upper_box"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/linear_layout">
+
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:textColor="@android:color/white"
+            android:id="@+id/balls"
+            android:text="4"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignWithParentIfMissing="true"/>
+
+        <View
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_below="@+id/balls"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/dot"
+            android:id="@+id/init_dot"
+            tools:ignore="InvalidId"
+            android:layout_alignWithParentIfMissing="true">
+
+        </View>
+    </LinearLayout>
+
+
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tap to start"
+        android:textColor="@android:color/darker_gray"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:textSize="25dp"
+        android:id="@+id/hint"
+        android:layout_below="@id/linear_layout"
+       />
+</RelativeLayout>
