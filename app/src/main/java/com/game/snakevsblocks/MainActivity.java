@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         Runnable runnable=new Runnable() {
             @Override
             public void run() {
-                int energyProbability=new Random().nextInt(4);
+                int energyProbability=new Random().nextInt(7);
 
                 if (energyProbability==2)
                 {
@@ -239,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
                 }
 
-                handler.postDelayed(this, 1000);
+                handler.postDelayed(this, 2000);
             }
         };
 
