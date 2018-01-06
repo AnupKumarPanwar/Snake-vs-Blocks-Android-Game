@@ -5,17 +5,20 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.BounceInterpolator;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -212,55 +215,77 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             @Override
             public void run() {
                 int energyProbability=new Random().nextInt(7);
-                int wallProbability=new Random().nextInt(10);
+                int wallProbability=new Random().nextInt(9);
 
                 if (energyProbability==2 || energyProbability==4 || energyProbability==5)
                 {
                     int noOfBalls=new Random().nextInt(3)+1;
 
                     for (int i=0; i<noOfBalls; i++) {
-                        int ballEnergy=new Random().nextInt(5)+1;
+
                         int energyX=new Random().nextInt((int)screenWidth-110)+10;
 //                        int energyY=new Random().nextInt((int)screenHeight*3/4-200);
 
-                        final View newEnergy = new View(MainActivity.this);
+                        final LinearLayout newEnergyHolder = new LinearLayout(MainActivity.this);
+                        final int energyAmount=new Random().nextInt(5)+1;
+                        final View newEnergy=new View(MainActivity.this);
+                        final TextView energyAmountHolder=new TextView(MainActivity.this);
+
+                        newEnergyHolder.setBackgroundColor(Color.TRANSPARENT);
+                        newEnergyHolder.setOrientation(LinearLayout.VERTICAL);
+
+                        energyAmountHolder.setText(String.valueOf(energyAmount));
                         newEnergy.setBackgroundResource(R.drawable.dot);
+                        energyAmountHolder.setTextColor(Color.WHITE);
+
+                        newEnergyHolder.setGravity(Gravity.CENTER);
+                        energyAmountHolder.setGravity(Gravity.CENTER);
+
+
                         newEnergy.setLayoutParams(new LinearLayout.LayoutParams(48, 48));
-                        newEnergy.setY(0);
-                        newEnergy.setX(energyX);
-                        gameContainer.addView(newEnergy);
-                        newEnergy.animate()
+
+                        newEnergyHolder.addView(energyAmountHolder);
+                        newEnergyHolder.addView(newEnergy);
+
+                        newEnergyHolder.setY(-(int)screenWidth/6);
+                        newEnergyHolder.setX(energyX);
+
+                        gameContainer.addView(newEnergyHolder);
+                        newEnergyHolder.animate()
                                 .translationY(screenHeight)
                                 .setInterpolator(new AccelerateInterpolator())
 //                                .setInterpolator(new BounceInterpolator())
-                                .setDuration(2000);
+                                .setDuration(2500);
 
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                gameContainer.removeView(newEnergy);
+                                gameContainer.removeView(newEnergyHolder);
                             }
-                        }, 1900);
+                        }, 2500);
 
                     }
 
                 }
-                else if (wallProbability==2)
+                else if (wallProbability==2 || wallProbability==3)
                 {
-                    final View[] tiles=new View[6];
+                    final Button[] tiles=new Button[6];
                     for (int i=0; i<6; i++)
                     {
-                        tiles[i] = new View(MainActivity.this);
+                        tiles[i] = new Button(MainActivity.this);
                         tiles[i].setBackgroundResource(R.drawable.blue_box);
                         tiles[i].setLayoutParams(new LinearLayout.LayoutParams((int)screenWidth/6, (int)screenWidth/6));
-                        tiles[i].setY(0);
+                        tiles[i].setTextColor(Color.WHITE);
+                        tiles[i].setTextSize(25);
+                        tiles[i].setText("5");
+                        tiles[i].setY(-(int)screenWidth/6);
                         tiles[i].setX(i*screenWidth/6);
                         gameContainer.addView(tiles[i]);
                         tiles[i].animate()
                                 .translationY(screenHeight)
                                 .setInterpolator(new AccelerateInterpolator())
 //                                .setInterpolator(new BounceInterpolator())
-                                .setDuration(2000);
+                                .setDuration(2500);
 
                         final int finalI = i;
                         handler.postDelayed(new Runnable() {
@@ -268,14 +293,14 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                             public void run() {
                                 gameContainer.removeView(tiles[finalI]);
                             }
-                        }, 1900);
+                        }, 2500);
                     }
 
                 }
 
                 else if (wallProbability==4 || wallProbability==6)
                 {
-                    final View[] tiles=new View[6];
+                    final Button[] tiles=new Button[6];
                     for (int i=0; i<6; i++)
                     {
                         int hideTile=new Random().nextInt(3);
@@ -283,17 +308,20 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                         {
                             continue;
                         }
-                        tiles[i] = new View(MainActivity.this);
+                        tiles[i] = new Button(MainActivity.this);
                         tiles[i].setBackgroundResource(R.drawable.blue_box);
                         tiles[i].setLayoutParams(new LinearLayout.LayoutParams((int)screenWidth/6, (int)screenWidth/6));
-                        tiles[i].setY(0);
+                        tiles[i].setTextColor(Color.WHITE);
+                        tiles[i].setTextSize(25);
+                        tiles[i].setText("5");
+                        tiles[i].setY(-(int)screenWidth/6);
                         tiles[i].setX(i*screenWidth/6);
                         gameContainer.addView(tiles[i]);
                         tiles[i].animate()
                                 .translationY(screenHeight)
                                 .setInterpolator(new AccelerateInterpolator())
 //                                .setInterpolator(new BounceInterpolator())
-                                .setDuration(2000);
+                                .setDuration(2500);
 
                         final int finalI = i;
                         handler.postDelayed(new Runnable() {
@@ -301,11 +329,11 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                             public void run() {
                                 gameContainer.removeView(tiles[finalI]);
                             }
-                        }, 1900);
+                        }, 2500);
                     }
                 }
 
-                handler.postDelayed(this, 750);
+                handler.postDelayed(this, 1000);
             }
         };
 
