@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     float screenWidth, screenHeight;
     LinearLayout linearLayout;
     View[] tail;
-    int tailLength=5;
+    int tailLength=5, displayLength=5;
     Handler handler;
     boolean gameStarted=false;
     int fallingVelocity=1;
@@ -272,11 +272,66 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                if(Math.abs(newEnergyHolder.getX()-initBall.getX())<80)
-                               {
-                                   gameContainer.removeView(newEnergyHolder);
+                                try
+                                {
+                                    if (initBall.getX()==tail[0].getX()) {
+                                        if (Math.abs(newEnergyHolder.getX() - initBall.getX()) < 65) {
+                                            gameContainer.removeView(newEnergyHolder);
+
+                                       for (int j = 0; j < energyAmount; j++) {
+                                           if (tailLength<10) {
+                                               View newBall = new View(MainActivity.this);
+                                               newBall.setBackgroundResource(R.drawable.dot);
+                                               newBall.setLayoutParams(new LinearLayout.LayoutParams(48, 48));
+                                               tail[tailLength] = newBall;
+                                               tail[tailLength].setX(tail[tailLength-1].getX());
+                                               linearLayout.addView(tail[tailLength]);
+                                               tailLength++;
+                                           }
+                                           else
+                                           {
+                                               break;
+                                           }
+                                       }
+
+                                            displayLength += energyAmount;
+                                            balls.setText(String.valueOf(displayLength));
 //                                   Toast.makeText(getApplicationContext(), String.valueOf(newEnergy.getY()),Toast.LENGTH_SHORT).show();
-                               }
+                                        }
+                                    }
+                                    else if (initBall.getX()!=tail[0].getX())
+                                    {
+                                        if (Math.abs(newEnergyHolder.getX() - initBall.getX()) < 100) {
+                                            gameContainer.removeView(newEnergyHolder);
+
+                                       for (int j = 0; j < energyAmount; j++) {
+                                            if (tailLength<10) {
+                                                View newBall = new View(MainActivity.this);
+                                                newBall.setBackgroundResource(R.drawable.dot);
+                                                newBall.setLayoutParams(new LinearLayout.LayoutParams(48, 48));
+                                                tail[tailLength] = newBall;
+                                                tail[tailLength].setX(tail[tailLength-1].getX());
+                                                linearLayout.addView(tail[tailLength]);
+                                                tailLength++;
+                                            }
+                                            else
+                                            {
+                                                break;
+                                            }
+                                        }
+
+
+                                        displayLength += energyAmount;
+                                            balls.setText(String.valueOf(displayLength));
+//                                   Toast.makeText(getApplicationContext(), String.valueOf(newEnergy.getY()),Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+
+                                }
+
                             }
                         }, 1500 );
 
@@ -356,7 +411,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                     }
                 }
 
-                handler.postDelayed(this, fallingTime/3);
+                handler.postDelayed(this, fallingTime/4);
             }
         };
 
