@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     int tailLength=5;
     Handler handler;
     boolean gameStarted=false;
+    int fallingVelocity=1;
+    int fallingTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         display.getSize(size);
         screenWidth=size.x;
         screenHeight=size.y;
+
+        fallingTime= (int) (screenHeight/fallingVelocity);
 
 
         gestureDetector=new GestureDetector(MainActivity.this, MainActivity.this);
@@ -121,6 +125,9 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 //        Toast.makeText(getApplicationContext(), "Down", Toast.LENGTH_SHORT).show();
         ibcurrentX=initBall.getX();
         bcurrentX=balls.getX();
+
+//        Toast.makeText(getApplicationContext(), String.valueOf(initBall.getY()),Toast.LENGTH_SHORT).show();
+
         return false;
     }
 
@@ -247,22 +254,38 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                         newEnergyHolder.addView(energyAmountHolder);
                         newEnergyHolder.addView(newEnergy);
 
-                        newEnergyHolder.setY(-(int)screenWidth/6);
+//                        newEnergyHolder.setY(-(int)screenWidth/6);
+                        newEnergyHolder.setY(-300);
                         newEnergyHolder.setX(energyX);
+
+//                        Toast.makeText(getApplicationContext(), String.valueOf(initBall.getX()),Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(), "Created",Toast.LENGTH_SHORT).show();
+
 
                         gameContainer.addView(newEnergyHolder);
                         newEnergyHolder.animate()
                                 .translationY(screenHeight)
                                 .setInterpolator(new AccelerateInterpolator())
 //                                .setInterpolator(new BounceInterpolator())
-                                .setDuration(2500);
+                                .setDuration(fallingTime);
+
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(Math.abs(newEnergyHolder.getX()-initBall.getX())<80)
+                               {
+                                   gameContainer.removeView(newEnergyHolder);
+//                                   Toast.makeText(getApplicationContext(), String.valueOf(newEnergy.getY()),Toast.LENGTH_SHORT).show();
+                               }
+                            }
+                        }, 1500 );
 
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 gameContainer.removeView(newEnergyHolder);
                             }
-                        }, 2500);
+                        }, fallingTime);
 
                     }
 
@@ -278,14 +301,14 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                         tiles[i].setTextColor(Color.WHITE);
                         tiles[i].setTextSize(25);
                         tiles[i].setText("5");
-                        tiles[i].setY(-(int)screenWidth/6);
+                        tiles[i].setY(-300);
                         tiles[i].setX(i*screenWidth/6);
                         gameContainer.addView(tiles[i]);
                         tiles[i].animate()
                                 .translationY(screenHeight)
                                 .setInterpolator(new AccelerateInterpolator())
 //                                .setInterpolator(new BounceInterpolator())
-                                .setDuration(2500);
+                                .setDuration(fallingTime);
 
                         final int finalI = i;
                         handler.postDelayed(new Runnable() {
@@ -293,7 +316,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                             public void run() {
                                 gameContainer.removeView(tiles[finalI]);
                             }
-                        }, 2500);
+                        }, fallingTime);
                     }
 
                 }
@@ -314,14 +337,14 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                         tiles[i].setTextColor(Color.WHITE);
                         tiles[i].setTextSize(25);
                         tiles[i].setText("5");
-                        tiles[i].setY(-(int)screenWidth/6);
+                        tiles[i].setY(-300);
                         tiles[i].setX(i*screenWidth/6);
                         gameContainer.addView(tiles[i]);
                         tiles[i].animate()
                                 .translationY(screenHeight)
                                 .setInterpolator(new AccelerateInterpolator())
 //                                .setInterpolator(new BounceInterpolator())
-                                .setDuration(2500);
+                                .setDuration(fallingTime);
 
                         final int finalI = i;
                         handler.postDelayed(new Runnable() {
@@ -329,11 +352,11 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                             public void run() {
                                 gameContainer.removeView(tiles[finalI]);
                             }
-                        }, 2500);
+                        }, fallingTime);
                     }
                 }
 
-                handler.postDelayed(this, 1000);
+                handler.postDelayed(this, fallingTime/3);
             }
         };
 
